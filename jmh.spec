@@ -1,19 +1,20 @@
-%global hghash a2a2d218a5ce
+%global hghash 4778686520db
 Name:          jmh
-Version:       1.10.5
-Release:       2%{?dist}
+Version:       1.11.2
+Release:       1%{?dist}
 Summary:       Java Microbenchmark Harness
 # BSD jmh-samples/src/main/java/*
 # 2 files have unknown license, reported @ http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/002037.html
 License:       GPLv2 with exceptions
 URL:           http://openjdk.java.net/projects/code-tools/jmh/
-Source0:       http://hg.openjdk.java.net/code-tools/jmh/archive/%{hghash}.tar.gz
+Source0:       http://hg.openjdk.java.net/code-tools/jmh/archive/%{hghash}.tar.bz2
 
 BuildRequires: maven-local
 BuildRequires: mvn(junit:junit)
 BuildRequires: mvn(net.sf.jopt-simple:jopt-simple)
 BuildRequires: mvn(org.apache.commons:commons-math3)
 # BuildRequires: mvn(org.apache.maven.plugins:maven-shade-plugin)
+BuildRequires: mvn(org.apache.maven.plugins:maven-site-plugin)
 BuildRequires: mvn(org.ow2.asm:asm)
 
 BuildArch:     noarch
@@ -104,11 +105,17 @@ This package contains javadoc for %{name}.
 rm -r %{name}-core/src/test/java/org/openjdk/jmh/results/format/ResultFormatTest.java
 
 # Fix non ASCII chars
-for s in $(find %{name}-samples -name "*.java");do
+for s in $(find %{name}-samples -name "*.java") \
+ %{name}-core-benchmarks/src/main/java/org/openjdk/jmh/validation/tests/BlackholeConsumeCPUTest.java \
+ %{name}-core-benchmarks/src/main/java/org/openjdk/jmh/validation/tests/BlackholeConsecutiveTest.java \
+ %{name}-core-benchmarks/src/main/java/org/openjdk/jmh/validation/tests/BlackholeSingleTest.java \
+ %{name}-core-benchmarks/src/main/java/org/openjdk/jmh/validation/tests/BlackholePipelinedTest.java \
+ %{name}-core-benchmarks/src/main/java/org/openjdk/jmh/validation/IterationScoresFormatter.java ;do
   native2ascii -encoding UTF8 ${s} ${s}
 done
+
 # http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/001997.html
-sed -i "s,59 Temple Place,51 Franklin Street,;s,Suite 330,Fifth Floor,;s,02111-1307,02110-1301,"  $(find -name "LICENSE") src/license/gpl_cpe/license.txt
+sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,02111-1307,02110-1301,"  $(find -name "LICENSE") src/license/gpl_cpe/license.txt
 
 %build
 
@@ -151,6 +158,9 @@ sed -i "s,59 Temple Place,51 Franklin Street,;s,Suite 330,Fifth Floor,;s,02111-1
 %license LICENSE src/license/*
 
 %changelog
+* Mon Nov 23 2015 gil cattaneo <puntogil@libero.it> 1.11.2-1
+- update to 1.11.2
+
 * Sat Aug 29 2015 gil cattaneo <puntogil@libero.it> 1.10.5-2
 - fix samples sub-package license
 
