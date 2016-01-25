@@ -1,6 +1,6 @@
-%global hghash 4778686520db
+%global hghash 534d83d9137f
 Name:          jmh
-Version:       1.11.2
+Version:       1.11.3
 Release:       1%{?dist}
 Summary:       Java Microbenchmark Harness
 # BSD jmh-samples/src/main/java/*
@@ -158,6 +158,9 @@ sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,0211
 %license LICENSE src/license/*
 
 %changelog
+* Mon Jan 25 2016 gil cattaneo <puntogil@libero.it> 1.11.3-1
+- update to 1.11.3
+
 * Mon Nov 23 2015 gil cattaneo <puntogil@libero.it> 1.11.2-1
 - update to 1.11.2
 
