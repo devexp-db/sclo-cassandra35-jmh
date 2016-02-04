@@ -1,7 +1,7 @@
 %global hghash 534d83d9137f
 Name:          jmh
 Version:       1.11.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Java Microbenchmark Harness
 # BSD jmh-samples/src/main/java/*
 # 2 files have unknown license, reported @ http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/002037.html
@@ -158,6 +158,9 @@ sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,0211
 %license LICENSE src/license/*
 
 %changelog
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Mon Jan 25 2016 gil cattaneo <puntogil@libero.it> 1.11.3-1
 - update to 1.11.3
 
