@@ -1,7 +1,7 @@
 %global hghash 534d83d9137f
 Name:          jmh
 Version:       1.11.3
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       Java Microbenchmark Harness
 # BSD jmh-samples/src/main/java/*
 # 2 files have unknown license, reported @ http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/002037.html
@@ -17,6 +17,9 @@ BuildRequires: mvn(org.apache.commons:commons-math3)
 BuildRequires: mvn(org.apache.maven.plugins:maven-site-plugin)
 BuildRequires: mvn(org.ow2.asm:asm)
 
+Obsoletes:     %{name}-core-ct
+Obsoletes:     %{name}-core-it
+
 BuildArch:     noarch
 
 %description
@@ -29,18 +32,6 @@ Summary:       JMH Core Benchmarks
 
 %description core-benchmarks
 JMH Core Benchmarks.
-
-%package core-ct
-Summary:       JMH Core Compilation Tests
-
-%description core-ct
-JMH Core Compilation Tests.
-
-%package core-it
-Summary:       JMH Core Integration Tests
-
-%description core-it
-JMH Core Integration Tests.
 
 %package generator-annprocess
 Summary:       JMH Generators: Annotation Processors
@@ -91,6 +82,8 @@ This package contains javadoc for %{name}.
 %setup -q -n %{name}-%{hghash}
 
 %pom_disable_module %{name}-archetypes
+%pom_disable_module %{name}-core-ct
+%pom_disable_module %{name}-core-it
 
 %pom_remove_plugin -r :maven-eclipse-plugin
 %pom_remove_plugin -r :maven-license-plugin
@@ -130,12 +123,6 @@ sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,0211
 %files core-benchmarks -f .mfiles-%{name}-core-benchmarks
 %license %{name}-core-benchmarks/LICENSE
 
-%files core-ct -f .mfiles-%{name}-core-ct
-%license LICENSE
-
-%files core-it -f .mfiles-%{name}-core-it
-%license %{name}-core-it/LICENSE
-
 %files generator-annprocess -f .mfiles-%{name}-generator-annprocess
 %license %{name}-generator-annprocess/LICENSE
 
@@ -158,6 +145,9 @@ sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,0211
 %license LICENSE src/license/*
 
 %changelog
+* Sun Jul 24 2016 gil cattaneo <puntogil@libero.it> 1.11.3-3
+- disable jmh-core-ct and jmh-core-it modules
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
