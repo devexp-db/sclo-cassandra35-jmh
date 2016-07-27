@@ -1,10 +1,8 @@
-%global hghash 534d83d9137f
+%global hghash 7ff584954008
 Name:          jmh
-Version:       1.11.3
-Release:       3%{?dist}
+Version:       1.13
+Release:       1%{?dist}
 Summary:       Java Microbenchmark Harness
-# BSD jmh-samples/src/main/java/*
-# 2 files have unknown license, reported @ http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/002037.html
 License:       GPLv2 with exceptions
 URL:           http://openjdk.java.net/projects/code-tools/jmh/
 Source0:       http://hg.openjdk.java.net/code-tools/jmh/archive/%{hghash}.tar.bz2
@@ -13,12 +11,8 @@ BuildRequires: maven-local
 BuildRequires: mvn(junit:junit)
 BuildRequires: mvn(net.sf.jopt-simple:jopt-simple)
 BuildRequires: mvn(org.apache.commons:commons-math3)
-# BuildRequires: mvn(org.apache.maven.plugins:maven-shade-plugin)
 BuildRequires: mvn(org.apache.maven.plugins:maven-site-plugin)
 BuildRequires: mvn(org.ow2.asm:asm)
-
-Obsoletes:     %{name}-core-ct
-Obsoletes:     %{name}-core-it
 
 BuildArch:     noarch
 
@@ -65,6 +59,7 @@ Java Microbenchmark Harness Parent POM.
 
 %package samples
 Summary:       JMH Samples
+# BSD jmh-samples/src/main/java/*
 License:       BSD
 
 %description samples
@@ -72,7 +67,6 @@ JMH Samples.
 
 %package javadoc
 Summary:       Javadoc for %{name}
-# BSD jmh-samples/src/main/java/*
 License:       BSD and GPLv2 with exceptions
 
 %description javadoc
@@ -108,7 +102,7 @@ for s in $(find %{name}-samples -name "*.java") \
 done
 
 # http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/001997.html
-sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,02111-1307,02110-1301,"  $(find -name "LICENSE") src/license/gpl_cpe/license.txt
+sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,02111-1307,02110-1301," src/license/gpl_cpe/license.txt
 
 %build
 
@@ -145,6 +139,9 @@ sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,0211
 %license LICENSE src/license/*
 
 %changelog
+* Wed Jul 27 2016 gil cattaneo <puntogil@libero.it> 1.13-1
+- update to 1.13
+
 * Sun Jul 24 2016 gil cattaneo <puntogil@libero.it> 1.11.3-3
 - disable jmh-core-ct and jmh-core-it modules
 
