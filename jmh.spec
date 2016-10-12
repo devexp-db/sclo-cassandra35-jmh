@@ -3,23 +3,22 @@
 
 %global hghash 7ff584954008
 
-Name:          %{?scl_prefix}jmh
-Version:       1.13
-Release:       2%{?dist}
-Summary:       Java Microbenchmark Harness
-License:       GPLv2 with exceptions
-URL:           http://openjdk.java.net/projects/code-tools/%{pkg_name}/
-Source0:       http://hg.openjdk.java.net/code-tools/%{pkg_name}/archive/%{hghash}.tar.bz2
+Name:		%{?scl_prefix}jmh
+Version:	1.13
+Release:	3%{?dist}
+Summary:	Java Microbenchmark Harness
+License:	GPLv2 with exceptions
+URL:		http://openjdk.java.net/projects/code-tools/%{pkg_name}/
+Source0:	http://hg.openjdk.java.net/code-tools/%{pkg_name}/archive/%{hghash}.tar.bz2
 
-BuildRequires: %{?scl_mvn_prefix}maven-local
-BuildRequires: %{?scl_java_prefix}junit
-BuildRequires: %{?scl_prefix}jopt-simple
-BuildRequires: %{?scl_prefix}apache-commons-math
-BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-site-plugin)
-BuildRequires: mvn(org.ow2.asm:asm)
+BuildRequires:	%{?scl_prefix_maven}maven-local
+BuildRequires:	%{?scl_prefix_maven}mvn(org.apache.maven.plugins:maven-site-plugin)
+BuildRequires:	%{?scl_prefix}jopt-simple
+BuildRequires:	%{?scl_prefix}apache-commons-math
+BuildRequires:	%{?scl_prefix_java_common}junit
 %{?scl:Requires: %scl_runtime}
 
-BuildArch:     noarch
+BuildArch:	noarch
 
 %description
 The JMH is a Java harness for building, running, and analysing
@@ -27,60 +26,60 @@ nano/micro/macro benchmarks written in Java and other languages
 targeting the JVM.
 
 %package core-benchmarks
-Summary:       JMH Core Benchmarks
+Summary:	JMH Core Benchmarks
 
 %description core-benchmarks
 JMH Core Benchmarks.
 
 %package generator-annprocess
-Summary:       JMH Generators: Annotation Processors
+Summary:	JMH Generators: Annotation Processors
 
 %description generator-annprocess
 JMH benchmark generator, based on annotation processors.
 
 %package generator-asm
-Summary:       JMH Generators: ASM
+Summary:	JMH Generators: ASM
 
 %description generator-asm
 JMH benchmark generator, based on ASM bytecode manipulation.
 
 %package generator-bytecode
-Summary:       JMH Generators: Bytecode
+Summary:	JMH Generators: Bytecode
 
 %description generator-bytecode
 JMH benchmark generator, based on byte-code inspection.
 
 %package generator-reflection
-Summary:       JMH Generators: Reflection
+Summary:	JMH Generators: Reflection
 
 %description generator-reflection
 JMH benchmark generator, based on reflection.
 
 %package parent
-Summary:       Java Microbenchmark Harness Parent POM
+Summary:	Java Microbenchmark Harness Parent POM
 
 %description parent
 Java Microbenchmark Harness Parent POM.
 
 %package samples
-Summary:       JMH Samples
+Summary:	JMH Samples
 # BSD jmh-samples/src/main/java/*
-License:       BSD
+License:	BSD
 
 %description samples
 JMH Samples.
 
 %package javadoc
-Summary:       Javadoc for %{name}
-License:       BSD and GPLv2 with exceptions
+Summary:	Javadoc for %{name}
+License:	BSD and GPLv2 with exceptions
 
 %description javadoc
 This package contains javadoc for %{name}.
 
 %prep
-%{?scl_enable}
 %setup -q -n %{pkg_name}-%{hghash}
 
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %pom_disable_module %{pkg_name}-archetypes
 %pom_disable_module %{pkg_name}-core-ct
 %pom_disable_module %{pkg_name}-core-it
@@ -93,6 +92,7 @@ This package contains javadoc for %{name}.
 
 # wagon-ssh
 %pom_xpath_remove "pom:build/pom:extensions" %{pkg_name}-core
+%{?scl:EOF}
 
 # textTest_ROOT:218->test:134->compare:115 Mismatch expected:<...thrpt ...
 rm -r %{pkg_name}-core/src/test/java/org/openjdk/jmh/results/format/ResultFormatTest.java
@@ -109,18 +109,16 @@ done
 
 # http://mail.openjdk.java.net/pipermail/jmh-dev/2015-August/001997.html
 sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,02111-1307,02110-1301," src/license/gpl_cpe/license.txt
-%{?scl_disable}
-
 
 %build
-%{?scl_enable}
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_build -s
-%{?scl_disable}
+%{?scl:EOF}
 
 %install
-%{?scl_enable}
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_install
-%{?scl_disable}
+%{?scl:EOF}
 
 %files -f .mfiles-%{pkg_name}-core
 %license %{pkg_name}-core/LICENSE
@@ -150,6 +148,9 @@ sed -i "s,59,51,;s,Temple Place,Franklin Street,;s,Suite 330,Fifth Floor,;s,0211
 %license LICENSE src/license/*
 
 %changelog
+* Wed Oct 12 2016 Tomas Repik <trepik@redhat.com> - 1.13-3
+- use standard SCL macros
+
 * Mon Aug 01 2016 Tomas Repik <trepik@redhat.com> - 1.13-2
 - scl conversion
 
